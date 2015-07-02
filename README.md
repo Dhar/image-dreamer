@@ -29,5 +29,7 @@ Read the [Google Research blog post on "Inceptionism"](http://googleresearch.blo
 ## Credits
 Thanks to the great work of Google's [deepdream](https://github.com/google/deepdream/blob/master/dream.ipynb) team!
 
+The Vagrant file and Vagrantbox are based on those provided by [Data Science Toolbox](http://datasciencetoolbox.org/).  Big thanks to them for providing the scientific Python bootstrap I needed to get this going!
+
 ## Now what?
 Have fun, hack, contribute!  This is just a starting point, I'd love to see where people take this!
