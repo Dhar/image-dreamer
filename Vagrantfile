@@ -6,7 +6,7 @@ Vagrant.configure(2) do |config|
 
   # Salt to taste
   config.vm.provider "virtualbox" do |v|
-    v.memory = 2048
+    v.memory = 5120
     v.cpus = 4
   end
 

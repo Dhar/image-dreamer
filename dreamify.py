@@ -98,5 +98,8 @@ if 'keys'==sys.argv[1]:
 
 img = np.float32(PIL.Image.open(sys.argv[1]))
 end_name = sys.argv[3] if len(sys.argv)>3 else 'inception_4c/output'
-_=deepdream(net, img, end=end_name)
+iter_n = int(sys.argv[4]) if len(sys.argv)>4 else 10
+octaves = int(sys.argv[5]) if len(sys.argv)>5 else 4
+oct_scale = float(sys.argv[6]) if len(sys.argv)>6 else 1.4
+_=deepdream(net, img, end=end_name, iter_n=iter_n, octave_n=octaves, octave_scale=oct_scale)
 savearray(_, sys.argv[2])
