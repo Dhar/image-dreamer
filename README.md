@@ -31,5 +31,9 @@ Thanks to the great work of Google's [deepdream](https://github.com/google/deepd
 
 The Vagrant file and Vagrantbox are based on those provided by [Data Science Toolbox](http://datasciencetoolbox.org/).  Big thanks to them for providing the scientific Python bootstrap I needed to get this going!
 
-## Now what?
+## Contributing
 Have fun, hack, contribute!  This is just a starting point, I'd love to see where people take this!
+
+If you make changes, please consider issuing a pull request.  I'm happy to oblige.
+
+Thanks to @borzoj and @dirtyvader for their contributions!
