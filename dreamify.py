@@ -45,7 +45,7 @@ def make_step(net, step_size=1.5, end='inception_4c/output', jitter=32, clip=Tru
 
     ox, oy = np.random.randint(-jitter, jitter+1, 2)
     src.data[0] = np.roll(np.roll(src.data[0], ox, -1), oy, -2) # apply jitter shift
-            
+
     net.forward(end=end)
     dst.diff[:] = dst.data  # specify the optimization objective
     net.backward(start=end)
@@ -54,17 +54,17 @@ def make_step(net, step_size=1.5, end='inception_4c/output', jitter=32, clip=Tru
     src.data[:] += step_size/np.abs(g).mean() * g
 
     src.data[0] = np.roll(np.roll(src.data[0], -ox, -1), -oy, -2) # unshift image
-            
+
     if clip:
         bias = net.transformer.mean['data']
-        src.data[:] = np.clip(src.data, -bias, 255-bias)    
+        src.data[:] = np.clip(src.data, -bias, 255-bias)
 
 def deepdream(net, base_img, iter_n=10, octave_n=4, octave_scale=1.4, end='inception_4c/output', clip=True, **step_params):
     # prepare base images for all octaves
     octaves = [preprocess(net, base_img)]
     for i in xrange(octave_n-1):
         octaves.append(nd.zoom(octaves[-1], (1, 1.0/octave_scale,1.0/octave_scale), order=1))
-    
+
     src = net.blobs['data']
     detail = np.zeros_like(octaves[-1]) # allocate image for network-produced details
     for octave, octave_base in enumerate(octaves[::-1]):
@@ -78,7 +78,7 @@ def deepdream(net, base_img, iter_n=10, octave_n=4, octave_scale=1.4, end='incep
         src.data[0] = octave_base+detail
         for i in xrange(iter_n):
             make_step(net, end=end, clip=clip, **step_params)
-            
+
             # visualization
             vis = deprocess(net, src.data[0])
             if not clip: # adjust image contrast if clipping is disabled
@@ -86,13 +86,20 @@ def deepdream(net, base_img, iter_n=10, octave_n=4, octave_scale=1.4, end='incep
             #showarray(vis)
             print octave, i, end, vis.shape
             clear_output(wait=True)
-            
+
         # extract details produced on the current octave
         detail = src.data[0]-octave_base
     # returning the resulting image
     return deprocess(net, src.data[0])
 
+if 'keys'==sys.argv[1]:
+    print "\n".join( net.blobs.keys())
+    sys.exit(0)
 
 img = np.float32(PIL.Image.open(sys.argv[1]))
-_=deepdream(net, img)
+end_name = sys.argv[3] if len(sys.argv)>3 else 'inception_4c/output'
+iter_n = int(sys.argv[4]) if len(sys.argv)>4 else 10
+octaves = int(sys.argv[5]) if len(sys.argv)>5 else 4
+oct_scale = float(sys.argv[6]) if len(sys.argv)>6 else 1.4
+_=deepdream(net, img, end=end_name, iter_n=iter_n, octave_n=octaves, octave_scale=oct_scale)
 savearray(_, sys.argv[2])
